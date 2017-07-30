@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="photons">
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<resultMap id="photoResult"    type="photo">
+		<result property="p_no" column="p_no" />
+		<result property="p_file" column="p_file"/>
+		<result property="p_writer"  column="p_writer" />
+		<result property="p_date"	  column="p_date" />
+		<result property="p_delete"	  column="p_delete" />
+
+	</resultMap>
+	<select id="list" parameterType="hashmap" resultMap="photoResult">
+		select * from (select a.*, rownum rn from (
+		select * from memoryPhoto where p_writer=#{id} and p_delete='n' 
+		<if test='year != 0'>
+			and to_char(p_date,'yyyy')=#{year, jdbcType=INTEGER}
+		</if>
+		<if test='month != 0'>
+			and to_char(p_date,'mm')=#{month, jdbcType=INTEGER}
+		</if> 
+		 order by p_date desc) a)
+		   where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<insert id="insert" parameterType="photo">
+		<selectKey keyProperty="p_no" order="BEFORE" resultType="int">
+			select nvl(max(p_no),0)+1 p_no from memoryPhoto
+		</selectKey>
+		insert into memoryPhoto values(#{p_no},#{p_file},#{p_writer},sysdate,'n')
+	</insert>
+	
+	<select id="yearList" parameterType="hashmap" resultType="string">
+		select distinct to_char(p_date,'yyyy') from memoryPhoto where 
+		<choose>
+			<when test="yourID!=null">
+			(p_writer=#{id} or p_writer=#{yourID})
+			</when>
+			<otherwise>
+				p_writer=#{id}
+			</otherwise>
+		</choose>
+		and p_delete='n'
+	</select>
+	
+	<select id="getTotal" parameterType="hashmap" resultType="int">
+		select count(*) from memoryPhoto where p_writer=#{id} and p_delete='n'
+		<if test='year != 0'>
+			and to_char(p_date,'yyyy')=#{year, jdbcType=INTEGER}
+		</if>
+		<if test='month != 0'>
+			and to_char(p_date,'mm')=#{month, jdbcType=INTEGER}
+		</if> 
+	</select>
+	
+	<select id="select" parameterType="int" resultType="Photo">
+		select * from memoryPhoto where p_no=#{p_no}
+	</select>
+	
+	<update id="update" parameterType="photo">
+		update memoryPhoto set p_file=#{p_file} where p_no=#{p_no}
+	</update>
+	
+	<update id="delete" parameterType="int">
+		update memoryPhoto set p_delete='y' where p_no=#{p_no}
+	</update>
+
+</mapper>

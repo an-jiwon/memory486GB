@@ -1,0 +1,74 @@
+이예경		안지원		최영권
+도서검색	도서관안내	열람실
+자료신청/예약	참여마당	마이페이지
+로그인		회원가입	관리자페이지
+
+
+
+private String id;
+	private String pass;
+	private String name;
+	private Date birth;
+	private String email;
+	private String phone;
+	private String zipcode;
+	private String addr1;
+	private String addr2;
+	private Date joindate;
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>QnA</title>
+<script type=text/javascript>
+	function showId(id) {
+		obj=document.getElementById(id);
+		if(obj.style.display == "none")
+			obj.style.display="inline";
+		else
+			obj.style.display="none";
+	}
+</script>
+
+</head>
+<body>
+	<h1>Q&A</h1>
+	<h2>자주묻는 질문사항들 입니다. 이 외의 문의는 자유게시판을 활용해 주세요.</h2>
+	<div id="content_bt">
+		<a href="#" onclick="showID('content');">
+		<img
+		</a>
+	</div>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>QnA</title>
+<style>
+
+</style>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+	<h1>Q&A</h1>
+	<h2>자주묻는 질문사항들 입니다. 이 외의 문의는 자유게시판을 활용해 주세요.</h2>
+	<button>Toggle 'em</button>
+	<p>Hiya</p>
+	<p>Such interesting text, eh?</p>
+	<script>
+		$("button").click(function() {
+			$("p").toggle("slow");
+		});
+	</script>
+</body>
+</html>

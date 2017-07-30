@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ddayns">
+	<resultMap id="ddayResult" type="dday">
+		<result property="day_no" column="day_no" />
+		<result property="day_title" column="day_title" />
+		<result property="day_date" column="day_date" />
+		<result property="day_id" column="day_id" />
+	</resultMap>
+	<insert id="setdday" parameterType="dday">
+	<selectKey keyProperty="c_no" order="BEFORE" resultType="int">
+			select nvl(max(day_no),0)+1 day_no from memoryDday
+	</selectKey>
+		insert into memoryDday values(#{c_no},#{c_content},#{fromDate},#{c_writer})
+	</insert>
+	<select id="select" parameterType="hashmap" resultType="dday">
+		select * from memoryDday where day_id=#{memberID} 
+		<if test="yourID!=null">
+		or day_id=#{yourID}
+		</if>
+	</select>
+	<delete id="deleteDday" parameterType="int">
+		delete from memoryDday where day_no=#{day_no}
+	</delete>
+	<select id="caldday" parameterType="int" resultType="int">
+		select to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd') - to_date(to_char(day_date,'yyyy-mm-dd'),'yyyy-mm-dd') 
+		from memoryDday where day_no=#{day_no}
+	</select>
+</mapper>

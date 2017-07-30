@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminns">
+	<resultMap id="adminResult" type="admin">
+		<result property="adminID" column="adminID" />
+		<result property="adminPass" column="adminPass" />
+	</resultMap>
+	
+	<select id="adminlogin" resultType="string" parameterType="string">
+		select adminPass from memoryadmin where adminID=#{adminid}
+	</select>
+	
+</mapper>

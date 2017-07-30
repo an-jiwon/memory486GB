@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="diaryns">
+	<resultMap id="diaryResult" type="diary">
+		<result property="d_no" column="d_no" />
+		<result property="d_writer" column="d_writer" />
+		<result property="d_date" column="d_date" />
+		<result property="d_content" column="d_content" />
+		<result property="d_file" column="d_file" />
+		<result property="d_location" column="d_location" />
+		<result property="d_emotion" column="d_emotion" />
+		<result property="d_delete" column="d_delete" />
+	</resultMap>
+	<select id="content" parameterType="Integer" resultMap="diaryResult">
+		select * from memorydiary where d_delete = 'n' and d_no=#{d_no}
+	</select>
+	<select id="list" parameterType="string" resultMap="diaryResult">
+		select * from memorydiary where d_delete = 'n' and d_writer = #{id} order by d_date desc
+	</select>
+	<select id="listall" parameterType="string" resultMap="diaryResult">
+		select * from memorydiary where d_delete = 'n' and (d_writer = #{id} or d_writer = (
+		select id_b from memorycouple where id_a=#{id}) or d_writer = (
+		select id_a from memorycouple where id_b=#{id})) order by d_date desc
+	</select>
+	
+	<insert id="insert" parameterType="diary">
+		<selectKey keyProperty="d_no" order="BEFORE" resultType="int">
+			select nvl(max(d_no),0)+1 d_no from memorydiary
+		</selectKey>
+		insert into memorydiary values
+		(#{d_no},#{d_writer},#{d_date},#{d_content},#{d_file},#{d_location},#{d_emotion},'n')
+	</insert>
+	<update id="delete" parameterType="int">
+		update memorydiary set d_delete = 'y' where d_no=#{no} 
+	</update>
+	<select id="listallmonth" parameterType="HashMap" resultMap="diaryResult">
+		select * from memorydiary where d_delete = 'n' and to_char(d_date,'mm')=#{num} and (d_writer = #{id} or d_writer = (
+		select id_b from memorycouple where id_a=#{id}) or d_writer = (
+		select id_a from memorycouple where id_b=#{id})) order by d_date desc
+	</select>
+	
+	<update id="update" parameterType="diary">
+		update memoryDiary set d_date=#{d_date}, d_content=#{d_content}, d_file=#{d_file}, d_location=#{d_location}
+		where d_no=#{d_no}
+	</update>
+	
+	
+</mapper>

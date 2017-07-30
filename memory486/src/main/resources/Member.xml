@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberns">
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<resultMap id="memberResult"    type="member">
+		<result property="memberID" column="memberID" />
+		<result property="memberPass"  column="memberPass" />
+		<result property="name"	  column="name" />
+		<result property="email"	column="email"/>
+		<result property="joindate"	column="joindate"/>
+		<result property="m_online"	column="m_online"/>
+		<result property="m_out"	column="m_out"/>
+		<result property="layout"	column="layout"/>
+		<result property="m_location"	column="m_location"/>
+		<result property="m_pic"	column="m_pic"/>
+	</resultMap>
+	<select id="login" resultType="string" parameterType="string">
+		select memberPass from memorymember where memberID=#{id} and m_out='n'
+	</select>
+	<select id="select" parameterType="string" resultType="member">
+		select * from memoryMember where memberID=#{id} and m_out='n'
+	</select>
+	<update id="update" parameterType="member" >
+		update memoryMember set memberPass=#{memberPass},name=#{name},email=#{email},
+		layout=#{layout, jdbcType=VARCHAR},m_location=#{m_location, jdbcType=VARCHAR},m_pic=#{m_pic, jdbcType=VARCHAR} where memberID=#{memberID} and m_out='n'
+	</update>
+	<select id="idchk" parameterType="string" resultType="string">
+		select * from memoryMember where memberID=#{id} and m_out='n'
+	</select>
+	<update id="delete" parameterType="string"> 
+		update memoryMember set m_out='y' where memberID=#{id} 
+	</update>
+	
+	<!--  -->
+<!-- 	<select id="login" resultType="string" parameterType="string">
+		select memberPass from memoryMember where memberID=#{memberID}
+	</select> -->
+	
+	<select id="getName" resultType="string">
+		select name from memoryMember where memberID=#{memberID} and m_out='n'
+	</select>
+	
+	<select id="selectId" resultType="string">
+		select memberID from memoryMember where memberID=#{memberID}
+	</select>	
+	
+	<insert id="insert" parameterType="member">
+		insert into memoryMember values(#{memberID}, #{memberPass}, #{name}, #{email}, sysdate, 'off', 'n', null , #{m_location}, null)
+	</insert>
+	
+	<update id ="online" parameterType="string">
+		update memoryMember set m_online='on' where memberId=#{memberID}  and m_out='n'
+	</update>	
+	<select id="status" resultType="string" parameterType="string">
+		select m_online from memoryMember where memberId=#{id} and m_out='n'
+	</select>
+	<select id="pic" resultType="string" parameterType="string">
+		select m_pic from memoryMember where memberId=#{memberID} and m_out='n'
+	</select>
+	
+	<select id="loc" parameterType="string" resultType="string">
+		select m_location from memoryMember where memberID=#{memberID} and m_out='n'
+	</select>
+	
+	<select id="getName2" parameterType="string" resultType="string">
+		select name from memoryMember where memberID=#{coupleid} and m_out='n'
+	</select>
+	
+	<select id="loc2" parameterType="string" resultType="string">
+		select m_location from memoryMember where memberID=#{coupleid} and m_out='n'
+	</select>
+	
+	<update id="logout" parameterType="string">
+		update memoryMember set m_online='off' where memberID=#{id}
+	</update>
+	
+	<!--  -->
+	
+	<select id="content" resultMap="memberResult" parameterType="string">
+		select * from memorymember where memberid=#{id}
+	</select>
+	
+	
+	<update id="setyourLayout" parameterType="hashmap">
+		update memoryMember set layout=#{yourLayout} where memberID=#{yourID}
+	</update>
+	
+	<select id="list" resultMap="memberResult">
+		select * from memoryMember
+	</select>
+	
+	<update id="recover" parameterType="string">
+		update memoryMember set m_out='n' where memberID=#{id}
+	</update>
+</mapper>

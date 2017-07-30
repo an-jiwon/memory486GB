@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="admin" type="memory.model.Admin" />
+		<typeAlias alias="member" type="memory.model.Member" />
+		<typeAlias alias="couple"  type="memory.model.Couple" />
+		<typeAlias alias="photo"  type="memory.model.Photo" />
+		<typeAlias alias="calendar"  type="memory.model.Calendar" />
+		<typeAlias alias="diary"  type="memory.model.Diary" />
+		<typeAlias alias="reply"  type="memory.model.Reply" />
+		<typeAlias alias="profile"  type="memory.model.Profile" />
+		<typeAlias alias="dday"  type="memory.model.Dday" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="Admin.xml" />
+		<mapper resource="Member.xml" />
+		<mapper resource="Couple.xml" />
+		<mapper resource="Photo.xml" />
+		<mapper resource="Calendar.xml" />
+		<mapper resource="Diary.xml" />
+		<mapper resource="Reply.xml" />
+		<mapper resource="Profile.xml" />
+		<mapper resource="Dday.xml" />
+	</mappers>
+</configuration>

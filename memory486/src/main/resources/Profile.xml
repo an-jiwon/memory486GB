@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="profilens">
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<resultMap id="profileResult"    type="profile">
+		<result property="pro_no" column="pro_no" />
+		<result property="pro_title"  column="pro_title" />
+		<result property="pro_writer"  column="pro_writer" />
+		<result property="pro_divide"	  column="pro_divide" />
+	</resultMap>
+	<select id="select" parameterType="string" resultType="profile">
+		select * from memoryProfile where pro_writer = #{id}
+	</select>
+	<insert id="insert" parameterType="profile">
+		<selectKey keyProperty="pro_no" order="BEFORE" resultType="int">
+			select nvl(max(pro_no),0)+1 p_no from memoryProfile
+		</selectKey>
+		insert into memoryProfile values(#{pro_no},#{pro_title},#{pro_writer},#{pro_divide})
+	</insert>
+	<select id="getProfile" parameterType="int" resultType="profile">
+		select * from memoryProfile where pro_no=#{pro_no}
+	</select>
+	<update id="update" parameterType="profile">
+		update memoryProfile set pro_title=#{pro_title}, pro_divide=#{pro_divide} where pro_no=#{pro_no}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from memoryProfile where pro_no=#{pro_no}
+	</delete>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="couplens">
+	<!-- Use type aliases to avoid typing the full classname every time. -->
+	<resultMap id="coupleResult"    type="couple">
+		<result property="ID_A" column="ID_A" />
+		<result property="ID_B"  column="ID_B" />
+		<result property="accept"	  column="accept" />
+
+	</resultMap>
+	
+	<select id="select" parameterType="string" resultType="couple">
+		select * from memoryCouple where (ID_A=#{id} and accept='y') or (ID_B=#{id} and accept='y')
+	</select>
+	<select id="chk" parameterType="string" resultType="string">
+		select * from memoryCouple where (ID_A=#{id} and accept='y') or (ID_B=#{id} and accept='y')
+	</select>
+	<insert id="request" parameterType="hashmap">
+		insert into memoryCouple values(#{id},#{ID_B},'n')
+	</insert>
+	<delete id="delete" parameterType="string">
+		delete from memoryCouple where ID_A=#{id} or ID_B=#{id}
+	</delete>
+	
+	<!--  -->
+	<select id="coupleid" parameterType="string" resultType="string">
+		select id_b from memoryCouple where id_a=#{memberID} union select id_a from memoryCouple where id_b=#{memberID}
+	</select>
+	<select id="intchk" parameterType="string" resultType="int">
+		select count(*) from memoryCouple where (ID_A=#{memberID} and accept='y') or( ID_B=#{memberID} and accept='y')
+	</select>
+	<select id="acceptchk" parameterType="string" resultType="string">
+		select accept from memoryCouple where ID_B=#{memberID} union select accept from memoryCouple where ID_a=#{memberID}
+	</select>
+	<select id="acceptid" parameterType="string" resultType="int">
+		select count(*) from memoryCouple where id_a=#{memberID}
+	</select>
+	<update id ="couplepositive" parameterType="string">
+		update memoryCouple set accept='y' where id_b=#{id}
+	</update>
+	<delete id ="couplenagative" parameterType="string">
+		delete from memoryCouple where id_b=#{id}  
+	</delete>
+	
+	
+	<!--  -->
+	
+	<select id="list" resultMap="coupleResult">
+		select * from memoryCouple where accept='y'
+	</select>
+	<select id="list2" resultMap="coupleResult">
+		select * from memoryCouple where accept='n'
+	</select>
+</mapper>
